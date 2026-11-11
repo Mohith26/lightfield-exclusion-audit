@@ -55,7 +55,7 @@ node --test test/*.test.mjs # 15 tests
 python3 -m http.server      # then open http://localhost:8000
 ```
 
-No build step and no dependencies. Node 20+ for the scripts and tests.
+No build step and no dependencies. Node 20+ for the scripts and tests. The GitHub Actions workflow is in `ci/test.yml` (it regenerates the data, checks it matches the committed files, and runs the tests). Move it to `.github/workflows/` to enable CI. It isn't there yet because the token that pushed this repo lacks the `workflow` scope.
 
 ## Honest limitations
 
