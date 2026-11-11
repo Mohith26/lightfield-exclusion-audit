@@ -18,6 +18,7 @@
 
 import { writeFileSync } from 'node:fs';
 import { mulberry32, fitCalibrator } from '../src/audit.js';
+import { dexp, dlog, dsin, dcos, dpow } from '../src/detmath.js';
 
 export const SEED = 20261110;
 export const CATEGORIES = [
@@ -51,14 +52,14 @@ function pick(rng, arr) { return arr[Math.floor(rng() * arr.length)]; }
 function beta(rng, a, b) {
   // Johnk-free: sum of exponentials via gamma for integer-ish shapes (Marsaglia-Tsang)
   const g = (k) => {
-    if (k < 1) return g(k + 1) * Math.pow(rng(), 1 / k);
+    if (k < 1) return g(k + 1) * dpow(rng(), 1 / k);
     const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
     for (;;) {
       let x, v;
-      do { const u1 = rng(), u2 = rng(); x = Math.sqrt(-2 * Math.log(u1 || 1e-12)) * Math.cos(2 * Math.PI * u2); v = 1 + c * x; } while (v <= 0);
+      do { const u1 = rng(), u2 = rng(); x = Math.sqrt(-2 * dlog(u1 || 1e-12)) * dcos(2 * Math.PI * u2); v = 1 + c * x; } while (v <= 0);
       v = v * v * v; const u = rng();
       if (u < 1 - 0.0331 * x * x * x * x) return d * v;
-      if (Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v;
+      if (dlog(u) < 0.5 * x * x + d * (1 - v + dlog(v))) return d * v;
     }
   };
   const x = g(a), y = g(b);
@@ -113,7 +114,7 @@ export function generate(seed = SEED, { drift = 0 } = {}) {
   const items = [];
   for (const [sub, c, k, count0, [a, b], pReal0, pCrmReal, pCrmNoise, tpl] of SUBTYPES) {
     const count = drift ? Math.round(count0 * (1 + drift * (2 * drng() - 1))) : count0;
-    const pReal = drift && pReal0 > 0 ? Math.min(0.97, pReal0 * Math.exp(drift * (2 * drng() - 1))) : pReal0;
+    const pReal = drift && pReal0 > 0 ? Math.min(0.97, pReal0 * dexp(drift * (2 * drng() - 1))) : pReal0;
     for (let j = 0; j < count; j++) {
       const t = tpl(rng);
       const p = clampP(0.5 + 0.5 * beta(rng, a, b));

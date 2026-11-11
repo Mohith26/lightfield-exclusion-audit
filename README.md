@@ -51,11 +51,11 @@ Design tokens (InterVariable at weight 425, the neutral and blue oklch scales, r
 ```bash
 node scripts/generate.mjs   # data/mailbox.json + data/prior.json (seeded)
 node scripts/evaluate.mjs   # data/results.json (headline + coverage study)
-node --test test/*.test.mjs # 15 tests
+node --test test/*.test.mjs # 16 tests
 python3 -m http.server      # then open http://localhost:8000
 ```
 
-No build step and no dependencies. Node 20+ for the scripts and tests. The GitHub Actions workflow is in `ci/test.yml` (it regenerates the data, checks it matches the committed files, and runs the tests). Move it to `.github/workflows/` to enable CI. It isn't there yet because the token that pushed this repo lacks the `workflow` scope.
+No build step and no dependencies. Node 20+ for the scripts and tests. The GitHub Actions workflow (`.github/workflows/test.yml`) regenerates the data on Linux, checks it matches the committed files byte for byte, and runs the tests. The generator and the core module use `src/detmath.js` (exp/log/sin/cos/pow built only from correctly rounded IEEE operations) because V8's `Math.exp`/`Math.log` can differ in the last bit between macOS arm64 and Linux x86-64, which made the fitted prior coefficients irreproducible across platforms.
 
 ## Honest limitations
 

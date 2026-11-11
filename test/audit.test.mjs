@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import * as A from '../src/audit.js';
 import { generate, pack, trainPrior } from '../scripts/generate.mjs';
 import { headline } from '../scripts/evaluate.mjs';
+import { dexp, dlog, dsin, dcos, dpow } from '../src/detmath.js';
 
 const mailbox = A.unpack(JSON.parse(readFileSync(new URL('../data/mailbox.json', import.meta.url))));
 const prior = JSON.parse(readFileSync(new URL('../data/prior.json', import.meta.url)));
@@ -150,4 +151,20 @@ test('README quotes the computed headline', () => {
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   const h = results.headline;
   for (const v of [h.ppi.lo, h.ppi.hi, h.truth, h.uniform.lo, h.uniform.hi]) assert.ok(readme.includes(String(Math.round(v))), `README missing ${Math.round(v)}`);
+});
+
+test('deterministic math: pinned bit-exact values (same on every platform) and within 2 ulp of Math.*', () => {
+  // Exact values produced on macOS arm64; CI on Linux x86-64 must match bit for bit.
+  assert.equal(dexp(-1.2345678901234), 0.2909604620972207);
+  assert.equal(dlog(0.0012345678), -6.697034329666487);
+  assert.equal(dcos(2 * Math.PI * 0.3141592), -0.392293963251902);
+  assert.equal(dsin(Math.PI * 0.123456), 0.3781975602958137);
+  assert.equal(dpow(0.7316, 1 / 1.75), 0.8364540965325369);
+  const r = A.mulberry32(99), eps = 2.220446049250313e-16;
+  for (let k = 0; k < 20000; k++) {
+    const u = r(), x = (u - 0.5) * 60, y = Math.exp((u - 0.5) * 200), z = (u - 0.5) * 20;
+    assert.ok(Math.abs(dexp(x) - Math.exp(x)) <= 2.5 * eps * Math.exp(x), `exp ${x}`);
+    assert.ok(Math.abs(dlog(y) - Math.log(y)) <= 2.5 * eps * Math.max(1, Math.abs(Math.log(y))), `log ${y}`);
+    assert.ok(Math.abs(dsin(z) - Math.sin(z)) <= 2 * eps && Math.abs(dcos(z) - Math.cos(z)) <= 2 * eps, `trig ${z}`);
+  }
 });

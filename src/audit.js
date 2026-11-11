@@ -18,6 +18,8 @@
 // is unbiased for the true hidden count M whatever f is, so a miscalibrated
 // Jev only costs width, never bias.
 
+import { dexp, dlog, dsin, dcos, dpow } from './detmath.js';
+
 export const Z95_TWO = 1.959963984540054;
 
 /** Seeded PRNG (mulberry32). Returns floats in [0, 1). */
@@ -42,11 +44,11 @@ export function normInv(p) {
   const lo = 0.02425, hi = 1 - lo;
   let q, r;
   if (p < lo) {
-    q = Math.sqrt(-2 * Math.log(p));
+    q = Math.sqrt(-2 * dlog(p));
     return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
   }
   if (p > hi) {
-    q = Math.sqrt(-2 * Math.log(1 - p));
+    q = Math.sqrt(-2 * dlog(1 - p));
     return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
   }
   q = p - 0.5; r = q * q;
@@ -138,7 +140,7 @@ export function ppiEstimate(f, pi, draws, labels, { n = labels.length, mask = nu
   // high more often than low. Linear interval near zero.
   let lo = found.size, hi = size;
   if (Number.isFinite(se)) {
-    if (est > 1) { const r = Math.exp(z * se / est); lo = est / r; hi = est * r; }
+    if (est > 1) { const r = dexp(z * se / est); lo = est / r; hi = est * r; }
     else { lo = est - z * se; hi = est + z * se; }
     lo = Math.max(found.size, lo); hi = Math.min(size, hi);
   }
@@ -193,7 +195,7 @@ export function toCSV(rows) {
 // any participant is on an open CRM record (Jev never sees the CRM), and the
 // category. PPI stays unbiased even if this prior is wrong.
 
-const logit = (q) => { const c = Math.min(1 - 1e-4, Math.max(1e-4, q)); return Math.log(c / (1 - c)); };
+const logit = (q) => { const c = Math.min(1 - 1e-4, Math.max(1e-4, q)); return dlog(c / (1 - c)); };
 
 export function features(it, nCat) {
   const x = new Float64Array(3 + nCat);
@@ -214,7 +216,7 @@ export function fitCalibrator(items, ys, nCat, { l2 = 1, iters = 30 } = {}) {
     for (let i = 0; i < X.length; i++) {
       const x = X[i];
       let s = 0; for (let j = 0; j < d; j++) s += w[j] * x[j];
-      const p = 1 / (1 + Math.exp(-s));
+      const p = 1 / (1 + dexp(-s));
       const r = p - ys[i], v = p * (1 - p);
       for (let j = 0; j < d; j++) {
         if (!x[j]) continue;
@@ -251,7 +253,7 @@ export function calibratedPredictions(items, coef, nCat) {
   return items.map((it) => {
     const x = features(it, nCat);
     let s = 0; for (let j = 0; j < x.length; j++) s += coef[j] * x[j];
-    return 1 / (1 + Math.exp(-s));
+    return 1 / (1 + dexp(-s));
   });
 }
 
