@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excluded activity · Audit | Lightfield</title>
+  <meta name="description" content="Unofficial concept demo: an audit for Lightfield exclusion categories that estimates how many real customer conversations are hidden, from a few spot-checks.">
+  <link rel="preconnect" href="https://rsms.me">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>window.__errs=[];addEventListener("error",e=>__errs.push(String(e.message)));addEventListener("unhandledrejection",e=>__errs.push(String(e.reason)));</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5l7 7-7 7M21 5l-7 7 7 7' fill='none' stroke='%23222' stroke-width='2'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="app">
+    <nav class="sidebar" aria-label="Main">
+      <div class="ws">
+        <span class="ws-name"><span class="ws-mark" aria-hidden="true"><span><i></i><i></i></span></span>Acme</span>
+        <button class="icon-btn" aria-label="Search (Cmd+K)" title="Search ⌘K"><i data-lucide="search"></i></button>
+        <button class="icon-btn" aria-label="Collapse sidebar"><i data-lucide="chevrons-left"></i></button>
+      </div>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="clock"></i>Up next</a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="bell"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="book-open"></i>Knowledge</a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="box"></i>Skills</a>
+      <div class="nav-label">Records</div>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="building"></i>Accounts</a>
+      <a class="nav-item" href="#/excluded/audit"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>Opportunities</a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="users"></i>Contacts</a>
+      <div class="nav-label">Resources</div>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="square-check"></i>Tasks</a>
+      <a class="nav-item" href="#/excluded/meetings"><i data-lucide="calendar"></i>Meetings</a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="sticky-note"></i>Notes</a>
+      <div class="nav-label">Lists</div>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="plus"></i>New list</a>
+      <div class="nav-label">Chats</div>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="plus"></i>New chat</a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="message-circle"></i><span class="trunc">Keep investor and hiring mail out...</span></a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="message-circle"></i><span class="trunc">Write emails to stalled deals...</span></a>
+      <a class="nav-item" href="#/excluded/audit"><i data-lucide="message-circle"></i><span class="trunc">Follow-Up Outreach to Intere...</span></a>
+      <div class="spacer"></div>
+      <a class="nav-item active" href="#/settings" id="nav-settings"><i data-lucide="settings"></i>Settings</a>
+    </nav>
+    <main class="main">
+      <header class="topbar">
+        <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+        <div class="right">
+          <button class="icon-btn" id="copy-link" aria-label="Copy link to this view" title="Copy link"><i data-lucide="link"></i></button>
+        </div>
+      </header>
+      <div class="scroll" id="scroll"><div class="page" id="view" aria-live="polite"></div></div>
+    </main>
+  </div>
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dlg-title"><div class="dialog" id="dialog"></div></div>
+  <div class="menu" id="menu" role="menu"></div>
+  <div class="tip" id="tip" role="tooltip"></div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="disclaimer">Unofficial concept demo by Mohith Gajjela. Not affiliated with Lightfield. Synthetic data.</div>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

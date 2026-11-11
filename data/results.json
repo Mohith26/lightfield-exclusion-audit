@@ -1,0 +1,107 @@
+{
+ "generated": "node scripts/evaluate.mjs",
+ "headline": {
+  "n": 60,
+  "uniqueChecks": 60,
+  "excluded": 7052,
+  "truth": 243,
+  "ppi": {
+   "est": 209.1,
+   "lo": 155.2,
+   "hi": 281.7,
+   "width": 126.5
+  },
+  "uniform": {
+   "found": 2,
+   "est": 235.1,
+   "lo": 64.8,
+   "hi": 801.4,
+   "width": 736.6
+  },
+  "jevOnly": 149.1,
+  "priorOnly": 270.1,
+  "crmGuard": {
+   "syncedBack": 294,
+   "realAmongThem": 217,
+   "est": 206.9,
+   "remainingTruth": 26,
+   "remainingUpper": 127.9
+  }
+ },
+ "coverage": {
+  "30": {
+   "ppiCoverage": 0.966,
+   "ppiMeanWidth": 353,
+   "uniformCoverage": 0.922,
+   "uniformMeanWidth": 1106
+  },
+  "60": {
+   "ppiCoverage": 0.962,
+   "ppiMeanWidth": 177,
+   "uniformCoverage": 0.968,
+   "uniformMeanWidth": 723
+  },
+  "100": {
+   "ppiCoverage": 0.971,
+   "ppiMeanWidth": 138,
+   "uniformCoverage": 0.981,
+   "uniformMeanWidth": 539
+  }
+ },
+ "perCategoryCoverageAt60": [
+  {
+   "category": "Cold sales pitches",
+   "truth": 53,
+   "coverage": 0.897
+  },
+  {
+   "category": "Mass advertising",
+   "truth": 0,
+   "coverage": 0.749
+  },
+  {
+   "category": "Promotional events",
+   "truth": 25,
+   "coverage": 0.785
+  },
+  {
+   "category": "Personal",
+   "truth": 34,
+   "coverage": 0.834
+  },
+  {
+   "category": "Automated noise",
+   "truth": 56,
+   "coverage": 0.961
+  },
+  {
+   "category": "Investor conversations",
+   "truth": 41,
+   "coverage": 0.976
+  },
+  {
+   "category": "Hiring",
+   "truth": 7,
+   "coverage": 0.917
+  },
+  {
+   "category": "Legal",
+   "truth": 27,
+   "coverage": 0.928
+  }
+ ],
+ "otherMailboxesAt60": {
+  "mailboxes": 40,
+  "auditsPerMailbox": 50,
+  "coverage": 0.925,
+  "meanWidth": 175,
+  "worstMailboxCoverage": 0.86
+ },
+ "otherMailboxesAt120": {
+  "mailboxes": 40,
+  "auditsPerMailbox": 50,
+  "coverage": 0.937,
+  "meanWidth": 127,
+  "worstMailboxCoverage": 0.88
+ }
+}
