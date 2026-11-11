@@ -239,7 +239,7 @@ function renderAudit() {
     const it = items[next];
     const crmText = it.crm ? `On open record${it.acct ? ' · ' + esc(it.acct) : ''}` : 'No open CRM records';
     spot = `<div class="card white spot" aria-label="Spot-check">
-      <div class="panel-head"><span class="h3">Spot-check</span><span class="faint num">Draw ${fmt(n + 1)} · ${fmt(sm.unique)} reviewed</span></div>
+      <div class="panel-head"><span class="h3">Spot-check</span><span class="faint num">Draw ${fmt(n + 1)} · ${fmt(sm.unique)} reviewed</span><button class="btn ghost" id="b-undo" ${n ? '' : 'disabled'} aria-keyshortcuts="U" style="height:24px;padding:0 6px;margin-right:-6px">Undo <kbd>U</kbd></button></div>
       <div class="spot-body">
         <div class="from">${avatar(it.from)}<span>${esc(it.from)}</span><span class="faint" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(it.email)}</span><span class="faint" style="margin-left:auto">${fmtDate(it.d)}</span></div>
         <div class="subj">${it.k === 'e' ? '<i data-lucide="calendar" style="vertical-align:-3px;margin-right:4px"></i>' : ''}${esc(it.subj)}</div>
@@ -254,7 +254,6 @@ function renderAudit() {
       <div class="spot-actions">
         <button class="btn" id="b-yes" aria-keyshortcuts="S"><i data-lucide="corner-up-left"></i>Belongs in CRM <kbd>S</kbd></button>
         <button class="btn" id="b-no" aria-keyshortcuts="E">Correctly excluded <kbd>E</kbd></button>
-        <button class="btn ghost" id="b-undo" ${n ? '' : 'disabled'} aria-keyshortcuts="U">Undo <kbd>U</kbd></button>
       </div>
       <div class="demo-row"><span class="chip gray" style="height:18px;font-size:.6875rem">Demo</span>${S.seeded ? '<span>First 60 reviews simulated.</span>' : ''}
         <button class="btn" id="b-sim">Review next 10 for me</button>
@@ -436,19 +435,20 @@ function renderSettings() {
     return `<div class="card-row cat-row ${changed ? 'pending' : ''}"><div style="flex:1;min-width:0">
       <div class="row-title">${esc(cat.name)} <span class="applies">${esc(cat.applies)}</span></div>
       <div class="row-desc">${esc(cat.desc)}</div>
-      <div class="audit-line"><i data-lucide="activity"></i>${ready ? `≈ ${fmt(r.est)} real conversations hidden` : 'Not audited yet'} · ${fmt(r.excluded)} excluded · ${fmt(r.crmCount)} on open records <a class="ul" href="#/excluded/audit/category/${cat.id}" style="text-decoration:underline;text-decoration-color:var(--color-neutral-t4)">See audit</a></div></div>
+      <div class="audit-line"><i data-lucide="activity"></i>${ready ? `≈ ${fmt(r.est)} real conversation${Math.round(r.est) === 1 ? '' : 's'} hidden` : 'Not audited yet'} · ${fmt(r.excluded)} excluded · ${fmt(r.crmCount)} on open records <a class="ul" href="#/excluded/audit/category/${cat.id}" style="text-decoration:underline;text-decoration-color:var(--color-neutral-t4)">See audit</a></div></div>
       <div style="display:flex;align-items:center;gap:8px;color:var(--color-content-secondary)"><span>Keep open CRM records</span>
       <button class="switch" role="switch" aria-checked="${on}" aria-label="Keep activity with open CRM records for ${esc(cat.name)}" data-c="${c}"></button>
       <button class="icon-btn" aria-label="Category actions"><i data-lucide="ellipsis"></i></button></div></div>`;
   }).join('');
   $('#view').innerHTML = `<h1 class="h1">Mail and calendar</h1><p class="sub">Manage record creation settings from your connected mail and calendar accounts</p>
-    <div class="card" style="margin-top:28px">
-      <div class="card-row" style="padding:16px"><span style="width:40px;height:40px;border-radius:10px;border:1px solid var(--color-border-subtle);display:grid;place-items:center;background:#fff">${gLogo()}</span>
+    <button class="btn" style="margin-top:22px" title="Connecting more accounts depends on your plan"><i data-lucide="plus"></i>Add account</button>
+    <div class="card acct" style="margin-top:20px">
+      <div class="card-row" style="padding:12px 16px;border-bottom:1px solid var(--color-border-subtle)"><span style="width:40px;height:40px;border-radius:10px;border:1px solid var(--color-border-subtle);display:grid;place-items:center;background:#fff">${gLogo()}</span>
         <div style="flex:1"><div class="row-title">jesse@acme.com</div><div class="row-desc">Google mail and calendar account</div></div>
         <span style="display:inline-flex;align-items:center;gap:8px"><span class="dot" style="background:#09ae3f"></span>Connected</span><button class="icon-btn" aria-label="Account actions"><i data-lucide="ellipsis"></i></button></div>
-      <div class="card-row"><div style="flex:1"><div class="row-title">Backsync range</div><div class="row-desc">Choose how far back to sync your mail and calendar</div></div><span class="pill">3 months</span></div>
-      <div class="card-row"><div style="flex:1"><div class="row-title">Calendar sync</div><div class="row-desc">Choose which meetings to track in Lightfield</div></div><span class="pill">External meetings only</span></div>
-      <div class="card-row"><div style="flex:1"><div class="row-title">Account and contact creation</div><div class="row-desc">Control how new records are automatically created from emails and calendar meetings</div></div><span class="pill">When you reach out</span></div>
+      <div class="card-row"><div style="flex:1"><div class="row-title">Backsync range</div><div class="row-desc">Choose how far back to sync your mail and calendar</div></div><span class="select">3 months<i data-lucide="chevron-down"></i></span></div>
+      <div class="card-row"><div style="flex:1"><div class="row-title">Calendar sync</div><div class="row-desc">Choose which meetings to track in Lightfield</div></div><span class="select">External meetings only<i data-lucide="chevron-down"></i></span></div>
+      <div class="card-row"><div style="flex:1"><div class="row-title">Account and contact creation</div><div class="row-desc">Control how new records are automatically created from emails and calendar meetings</div></div><span class="select">When you reach out<i data-lucide="chevron-down"></i></span></div>
     </div>
     <div class="section-title">Exclusions</div>
     <div class="card"><div class="card-row" style="padding:14px 16px"><div style="flex:1"><div class="row-title">Excluded activity types</div><div class="row-desc">Lightfield checks every email and meeting from this account against these descriptions and keeps matches out of the CRM.</div></div>
@@ -522,7 +522,7 @@ function exportJSON() {
 
 // ---------------------------------------------------------------- keyboard + states
 document.addEventListener('keydown', (e) => {
-  if (e.target.closest('input,select,textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+  const tg = e.target; if ((tg && tg.closest && tg.closest('input,select,textarea')) || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === 'Escape') { closeDialog(); closeMenu(); return; }
   if ($('#overlay').classList.contains('open')) return;
   const onAudit = parseHash().parts[1] === 'audit' && !parseHash().parts[2];
