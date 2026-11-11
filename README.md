@@ -51,7 +51,7 @@ Design tokens (InterVariable at weight 425, the neutral and blue oklch scales, r
 ```bash
 node scripts/generate.mjs   # data/mailbox.json + data/prior.json (seeded)
 node scripts/evaluate.mjs   # data/results.json (headline + coverage study)
-node --test test/           # 15 tests
+node --test test/*.test.mjs # 15 tests
 python3 -m http.server      # then open http://localhost:8000
 ```
 
